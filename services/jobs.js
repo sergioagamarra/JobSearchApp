@@ -3,6 +3,7 @@ const JobModel = require("../models/job")
 
 class Job{
 
+    // Recupera todas los puestos de trabajo realizados por los empleadores
     async getAll(){
         try {
             const jobs = await JobModel.find()
@@ -12,6 +13,7 @@ class Job{
         }
     }
 
+    // Recupera un puesto de trabajo por su ID
     async getOne(id){
         try {
             const job = await JobModel.findById(id)
@@ -21,8 +23,10 @@ class Job{
         }
     }
 
+    // Registra un nuevo puesto de trabajo a partir del empleador del token
     async create(data){
         try { 
+            // La función cambia a minusculas todos los string de categoria para luego facilitar la busqueda
             data.category = this.#toLowerCaseList(data.category)
             const job = await JobModel.create(data)
             return job
@@ -31,10 +35,13 @@ class Job{
         }
     }
 
+    // Agrega el documento de puesto de trabajo un nuevo postulante de acuerdo a la información del token
     async apply(id, data){
         try {
+            // La función valida si existe un puesto de trabajo con un determinado ID
             const validationJob = await this.#validationJob(id)
             if (!validationJob.status){
+                // La función valida si el postunlante ya se postuló en el puesto
                 const validationApplicant = await this.#validationApplicant(id, data.id)
                 if(!validationApplicant.status){
                     const job = await JobModel.findByIdAndUpdate(id, { $push: {applicants: data}}, {new: true})
@@ -55,6 +62,7 @@ class Job{
         }
     }
 
+    // Elimina la postulación de un postulante a un puesto de trabajo, de acuerdo al token
     async unapply(id, userApplicant){
         try {
             console.log(userApplicant);
@@ -80,6 +88,7 @@ class Job{
         }
     }
 
+    // Filtra los puestos de trabajos por categoria de acuerdo a un array de string 
     async getJobByCategory(categories){
         try {
             categories.category = this.#toLowerCaseList(categories.category)
@@ -99,6 +108,7 @@ class Job{
         }
     }
 
+    // Filtra los puestos de trabajo por ubicación de acuerdo a pais, provincia o ciudad
     async getJobByLocation(location){
         try {
             let jobs
@@ -117,9 +127,6 @@ class Job{
                     "location.city": location.city
                 })
             }
-            /* console.log(data.country); */
-            /* const jobs = await JobModel.find({location})
-            console.log(jobs); */
             if (jobs[0]) {
                 return jobs
             }
@@ -131,6 +138,7 @@ class Job{
         }
     }
 
+    // Recupera los puestos de trabajo a los que un postulante se postuló a partir del token
     async getJobByApplicant(applicant){
         try {
             const jobs = await JobModel.aggregate([
@@ -156,6 +164,7 @@ class Job{
 
     }
 
+    // Recupera los puestos de trabajo que un empleador registro a partir del token
     async getJobByEmployer(employer){
         try {
             const jobs = await JobModel.find({"employer.id": employer.id})
@@ -172,6 +181,7 @@ class Job{
 
     }
 
+    // Cambia el estado del puesto de trabajo para identificar la finalización de la reclutación
     async updateState(idJob, employer){
         try {
             const validationJob = await this.#validationJob(idJob)
@@ -197,6 +207,7 @@ class Job{
         }
     }
 
+    // Valida si un determinado empleador registro un determinado puesto de trabajo
     async #validationEmployer(idJob, userEmployer){
         try {
             console.log(userEmployer);
@@ -217,6 +228,7 @@ class Job{
         }
     }
 
+    // Valida si un puesto de trabajo existe a partir de su ID
     async #validationJob(id){
         try {
             
@@ -237,6 +249,7 @@ class Job{
         }
     }
 
+    // Valida si un determinado postulante ya realizó la postulación a un determinado puesto de trabajo
     async #validationApplicant(idJob, idApplicant){
         try {
             /* const applicant = await JobModel.findOne({_id: idJob, applicants: {$all: [{id: idApplicant}]}}) */
@@ -263,6 +276,7 @@ class Job{
         }
     }
 
+    // Cambia los string de categoria a minusculas para facilitar el filtro
     #toLowerCaseList(category){
         for (let i = 0; i < category.length; i++) {
             category[i] = category[i].toLowerCase()
