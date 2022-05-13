@@ -55,13 +55,14 @@ class Job{
         }
     }
 
-    /* async unapply(id, userApplicant){
+    async unapply(id, userApplicant){
         try {
+            console.log(userApplicant);
             const validationJob = await this.#validationJob(id)
             if (!validationJob.status){
-                const validationApplicant = await this.#validationApplicant(id, data.id)
+                const validationApplicant = await this.#validationApplicant(id, userApplicant.id)
                 if(validationApplicant.status){
-                    const job = await JobModel.findByIdAndUpdate(id, { $pull: {applicants: userApplicant}}, {new: true})
+                    const job = await JobModel.findByIdAndUpdate(id, { $pull: {applicants: {id: userApplicant.id}}}, {new: true})
                     return job
                 }
                 return {
@@ -77,7 +78,7 @@ class Job{
         } catch (error) {
             console.log(error);
         }
-    } */
+    }
 
     async getJobByCategory(categories){
         try {

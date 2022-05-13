@@ -34,11 +34,11 @@ function jobs(app){
         return res.json(job)
     })
 
-    /* router.put("/unapply/:id", ...authMiddleware("applicant"), async (req, res) => {
+    router.put("/unapply/:id", ...authMiddleware("applicant"), async (req, res) => {
         const applicant = req.user
         const job = await jobServ.unapply(req.params.id, applicant)
         return res.json(job)
-    }) */
+    })
 
     router.post("/category", ...authMiddleware("applicant"), async (req, res) => {
         const jobs = await jobServ.getJobByCategory(req.body)
