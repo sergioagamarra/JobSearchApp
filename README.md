@@ -22,6 +22,7 @@
       npm install mongoose
       npm install jsonwebtoken
       npm install bcrypt
+      npm install cors
 
 
 ## 🏓 Endponints que implementamos en <a href="https://app.getpostman.com/run-collection/42cc6054d45544c448d7?action=collection%2Fimport"> Postman</a>:
