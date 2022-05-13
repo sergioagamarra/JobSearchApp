@@ -17,7 +17,7 @@ class Auth{
 
         return {
             error: true,
-            message: "Credenciales incorrectas"
+            message: "Wrong credentials"
         }
         
     }

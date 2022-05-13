@@ -13,7 +13,10 @@ const userSchema = new Schema({
         type: String,
         enum: ["applicant", "employer", "admin"]
     },
-    birthday: { type: Date, default: Date.now }
+    birthday: { 
+        type: Date, 
+        default: Date.now 
+    }
 })
 
 const UserModel = mongoose.model("User", userSchema)

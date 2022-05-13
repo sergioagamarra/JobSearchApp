@@ -15,25 +15,36 @@ function jobs(app){
         
     })
 
-    router.post("/", async(req,res) => {
-        const job = await jobServ.create(req.body)
+    router.get("/:id", async(req,res) => {
+        const jobs = await jobServ.getOne(req.params.id)
+        return res.json(jobs)
+        
+    })
+
+    router.post("/", ...authMiddleware("employer"), async (req,res) => {
+        const data = req.body
+        data.employer = req.user
+        const job = await jobServ.create(data)
         return res.json(job)
     })
 
-    router.put("/apply/:id", async(req, res) => {
-        const job = await jobServ.apply(req.params.id, req.body)
+    router.put("/apply/:id", ...authMiddleware("applicant"), async (req, res) => {
+        const applicant = req.user
+        const job = await jobServ.apply(req.params.id, applicant)
         return res.json(job)
     })
 
-    /* router.put("/:id", async (req,res)=>{
-        const user = await userServ.update(req.params.id, req.body)
-        return res.json(user)
+    router.get("/category", ...adminValidation("applicant"), async (req, res) => {
+        const jobs = await jobServ.getJobByCategory(req.body)
+        return res.json(jobs)
     })
 
-    router.delete("/:id", async (req,res)=>{
-        const user = await userServ.delete(req.params.id)
-        return res.json(user)
-    }) */
+    router.get("/location", ...adminValidation("applicant"), async (req, res) => {
+        const jobs = await jobServ.getJobByLocation(req.body)
+        return res.json(jobs)
+    })
+
+
 }
 
 module.exports = jobs

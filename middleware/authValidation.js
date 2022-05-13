@@ -23,7 +23,7 @@ function authValidation(req, res, next){
     }
     return res.status(403).json({
         error: true,
-        message: "Insufficient permissions"
+        message: "Permission denied"
     })
 }
 
@@ -33,7 +33,7 @@ function adminValidation(req, res, next){
     } else{
         return res.status(403).json({
             error: true,
-            message: "Insufficient permissions"
+            message: "Permission denied"
         })
     }
 }
@@ -44,7 +44,7 @@ function applicantValidation(req, res, next){
     } else{
         return res.status(403).json({
             error: true,
-            message: "Insufficient permissions"
+            message: "Permission denied"
         })
     }
 }
@@ -55,7 +55,7 @@ function employerValidation(req, res, next){
     } else{
         return res.status(403).json({
             error: true,
-            message: "Insufficient permissions"
+            message: "Permission denied"
         })
     }
 }
@@ -66,7 +66,7 @@ function employerAdminValidation(req, res, next){
     } else{
         return res.status(403).json({
             error: true,
-            message: "Insufficient permissions"
+            message: "Permission denied"
         })
     }
 }
