@@ -1,6 +1,7 @@
 const express = require("express")
 const { port } = require("./config")
 const {connection} = require("./config/db")
+const cors = require("cors")
 
 //Importando routes
 const users = require("./routes/users")
@@ -12,6 +13,9 @@ connection()
 const app = express()
 
 // Middleware de JSON
+app.use(cors({
+    origin: ["http://localhost:3000"]
+}))
 app.use(express.json())
 
 //Usando routes

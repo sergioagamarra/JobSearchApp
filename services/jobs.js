@@ -268,7 +268,7 @@ class Job{
             }
             return {
                 status: false,
-                message: ""
+                message: "You did not apply for this job"
             }
             
         } catch (error) {
