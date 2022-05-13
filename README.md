@@ -1,4 +1,4 @@
-# Hola! Somos Sergio and Natalia 👋🏾 👨🏽‍💻 👩🏽‍💻
+# Hola! Somos Sergio Gamarra y Natalia Estrada 👋🏾 👨🏽‍💻 👩🏽‍💻
 ## Bienvenidos a nuetro 1er Proyecto de BackEnd NodeJs de <a href="https://www.tzuzulcode.com/"> Tzuzul Code</a> 🚀
 <img align="center" width="300" src="https://i.pinimg.com/originals/21/11/61/21116158daaeb1459b4ec0758505e1ad.gif" alt="baner"><img align="center" width="300" src="https://www.tecnoschool.com.ar/img/cursos/python/python-6.gif" alt="baner">
 
@@ -24,5 +24,5 @@
       npm install bcrypt
 
 
-## ✔🏓 Endponints de Postman:
+## 🏓 Endponints implementados en <a href="https://www.tzuzulcode.com/"> Postman</a>:
 ![image](https://user-images.githubusercontent.com/43660792/168229044-42d02348-1463-416c-a580-07d84d064813.png)
