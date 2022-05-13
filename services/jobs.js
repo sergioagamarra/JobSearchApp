@@ -34,10 +34,10 @@ class Job{
     async apply(id, data){
         try {
             const validationJob = await this.#validationJob(id)
-            const validationApplicant = await this.#validationApplicant(id, data.id)
             if (!validationJob.status){
+                const validationApplicant = await this.#validationApplicant(id, data.id)
                 if(!validationApplicant.status){
-                    const job = await JobModel.findByIdAndUpdate(id, { $push: {applicants: data}}, {new:true})
+                    const job = await JobModel.findByIdAndUpdate(id, { $push: {applicants: data}}, {new: true})
                     return job
                 }
                 return {
@@ -54,6 +54,30 @@ class Job{
             console.log(error);
         }
     }
+
+    /* async unapply(id, userApplicant){
+        try {
+            const validationJob = await this.#validationJob(id)
+            if (!validationJob.status){
+                const validationApplicant = await this.#validationApplicant(id, data.id)
+                if(validationApplicant.status){
+                    const job = await JobModel.findByIdAndUpdate(id, { $pull: {applicants: userApplicant}}, {new: true})
+                    return job
+                }
+                return {
+                    error: !validationApplicant.status,
+                    message: validationApplicant.message
+                } 
+                
+            }
+            return {
+                error: validationJob.status,
+                message: validationJob.message
+            } 
+        } catch (error) {
+            console.log(error);
+        }
+    } */
 
     async getJobByCategory(categories){
         try {
@@ -106,8 +130,95 @@ class Job{
         }
     }
 
+    async getJobByApplicant(applicant){
+        try {
+            const jobs = await JobModel.aggregate([
+                {
+                  $unwind: "$applicants"
+                },
+                {
+                  $match: {
+                    "applicants.id": applicant.id
+                  }
+                }
+              ])
+            if (jobs[0]){
+                return jobs
+            }
+            return {
+                error: true,
+                message: "No job applications found"
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    async getJobByEmployer(employer){
+        try {
+            const jobs = await JobModel.find({"employer.id": employer.id})
+            if (jobs[0]){
+                return jobs
+            }
+            return {
+                error: true,
+                message: "No jobs created were found"
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    async updateState(idJob, employer){
+        try {
+            const validationJob = await this.#validationJob(idJob)
+            console.log("JOB", validationJob.status);
+            if (!validationJob.status){
+                const validationEmployer = await this.#validationEmployer(idJob, employer)
+                console.log("EMPLOYER", validationEmployer.status);
+                if (!validationEmployer.status){
+                    const job = await JobModel.findByIdAndUpdate(idJob, {state: false}, {new: true})
+                    return job
+                }
+                return {
+                    error: validationEmployer.status,
+                    message: validationEmployer.message
+                }
+            }
+            return {
+                error: validationJob.status,
+                message: validationJob.message
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async #validationEmployer(idJob, userEmployer){
+        try {
+            console.log(userEmployer);
+            const employer = await JobModel.findById(idJob)
+            if(employer.employer.id === userEmployer.id){
+                return {
+                    status: false,
+                    message: ""
+                }
+            }
+            return {
+                status: true,
+                message: "You did not create this job"
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async #validationJob(id){
         try {
+            
             const job = await JobModel.findById(id)
             if (job) {
                 return {

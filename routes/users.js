@@ -10,32 +10,22 @@ function users(app){
     app.use("/api/users",router)
     
     router.get("/", ...authMiddleware("admin"), async (req,res)=>{
-        /* const user = req.user
-        if(user.role === "admin"){
-            const users = await userServ.getAll()
-            return res.json(users)
-        }
-
-        return res.status(403).json({
-            error: true,
-            message: "Insufficient permissions"
-        }) */
         const users = await userServ.getAll()
         return res.json(users)
         
     })
 
-    router.post("/", async (req,res)=>{
+    router.post("/", ...authMiddleware("admin"), async (req,res)=>{
         const user = await userServ.create(req.body)
         return res.json(user)
     })
 
-    router.put("/:id", async (req,res)=>{
+    router.put("/:id", ...authMiddleware("admin"), async (req,res)=>{
         const user = await userServ.update(req.params.id, req.body)
         return res.json(user)
     })
 
-    router.delete("/:id", async (req,res)=>{
+    router.delete("/:id", ...authMiddleware("admin"), async (req,res)=>{
         const user = await userServ.delete(req.params.id)
         return res.json(user)
     })

@@ -71,6 +71,18 @@ function employerAdminValidation(req, res, next){
     }
 }
 
+function applicantEmployerAdminValidation(req, res, next){
+    if(req.user.role === "employer" || req.user.role === "admin" || req.user.role === "applicant"){
+        return next()
+    } else{
+        return res.status(403).json({
+            error: true,
+            message: "Permission denied"
+        })
+    }
+}
+
+
 function authMiddleware(type){
     let middlewares
     if(type === "employer"){
@@ -81,6 +93,8 @@ function authMiddleware(type){
         middlewares = [authValidation,applicantValidation]
     } else if(type === "admin"){
         middlewares = [authValidation,adminValidation]
+    } else if(type === "applicant-employer-admin"){
+        middlewares = [authValidation,applicantEmployerAdminValidation]
     } else{
         middlewares = []
     }

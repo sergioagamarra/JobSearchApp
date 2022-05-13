@@ -9,13 +9,13 @@ function jobs(app){
 
     app.use("/api/jobs",router)
     
-    router.get("/", async(req,res) => {
+    router.get("/", ...authMiddleware("applicant-employer-admin"), async(req,res) => {
         const jobs = await jobServ.getAll()
         return res.json(jobs)
         
     })
 
-    router.get("/:id", async(req,res) => {
+    router.get("/:id", ...authMiddleware("applicant-employer-admin"), async(req,res) => {
         const jobs = await jobServ.getOne(req.params.id)
         return res.json(jobs)
         
@@ -34,14 +34,35 @@ function jobs(app){
         return res.json(job)
     })
 
-    router.get("/category", ...adminValidation("applicant"), async (req, res) => {
+    /* router.put("/unapply/:id", ...authMiddleware("applicant"), async (req, res) => {
+        const applicant = req.user
+        const job = await jobServ.unapply(req.params.id, applicant)
+        return res.json(job)
+    }) */
+
+    router.post("/category", ...authMiddleware("applicant"), async (req, res) => {
         const jobs = await jobServ.getJobByCategory(req.body)
         return res.json(jobs)
     })
 
-    router.get("/location", ...adminValidation("applicant"), async (req, res) => {
+    router.post("/location", ...authMiddleware("applicant"), async (req, res) => {
         const jobs = await jobServ.getJobByLocation(req.body)
         return res.json(jobs)
+    })
+
+    router.post("/applicant", ...authMiddleware("applicant"), async (req,res) => {
+        const jobs = await jobServ.getJobByApplicant(req.user)
+        return res.json(jobs)
+    })
+
+    router.put("/state/:id", ...authMiddleware("employer"), async (req, res) => {
+        const job = await jobServ.updateState(req.params.id, req.user)
+        return res.json(job)
+    })
+
+    router.post("/employer", ...authMiddleware("employer"), async (req, res) => {
+        const job = await jobServ.getJobByEmployer(req.user)
+        return res.json(job)
     })
 
 
