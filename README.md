@@ -24,5 +24,5 @@
       npm install bcrypt
 
 
-## 🏓 Endponints implementados en <a href="https://www.tzuzulcode.com/"> Postman</a>:
+## 🏓 Endponints que implementados en <a href="https://app.getpostman.com/run-collection/42cc6054d45544c448d7?action=collection%2Fimport"> Postman</a>:
 ![image](https://user-images.githubusercontent.com/43660792/168229044-42d02348-1463-416c-a580-07d84d064813.png)
